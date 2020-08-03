@@ -3,7 +3,9 @@ const admin = require("firebase-admin");
 
 admin.initializeApp();
 
-exports.getPosts = functions.https.onRequest((request, response) => {
+
+
+exports.getPosts = functions.https.onRequest((req, res) => {
   admin
     .firestore()
     .collection("posts")
@@ -21,9 +23,14 @@ exports.getPosts = functions.https.onRequest((request, response) => {
     });
 });
 
-exports.createPosts = functions.https.onRequest((request, response) => {
+
+
+exports.createPosts = functions.https.onRequest((req, res) => {
+  if (req.method !== "POST") {
+    return res.status(400).json({ error: "Method not allowed" });
+  }
   const newPost = {
-    body: req.body.text,
+    text: req.body.text,
     userHandle: req.body.userHandle,
     createdAt: admin.firestore.Timestamp.fromDate(new Date()),
   };

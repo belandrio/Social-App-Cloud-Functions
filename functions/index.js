@@ -7,7 +7,9 @@ const { getPosts, createPost } = require("./handlers/posts");
 const {
   signup,
   login,
-  uploadImage
+  uploadImage,
+  addUserDetails,
+  getAuthenticatedUser
 } = require("./handlers/users");
 
 //Posts routes
@@ -18,6 +20,8 @@ app.post("/createPost", AuthMiddleware, createPost);
 app.post("/signup", signup);
 app.post("/login", login);
 app.post("/user/image", AuthMiddleware, uploadImage);
+app.post('/user', AuthMiddleware, addUserDetails);
+app.get('/user', AuthMiddleware, getAuthenticatedUser);
 
 //https://baseurl.com/api/posts or https://baseurl.com/api/createPost
 

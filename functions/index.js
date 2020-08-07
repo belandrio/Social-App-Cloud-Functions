@@ -3,7 +3,7 @@ const app = require("express")();
 
 const AuthMiddleware = require("./util/AuthMiddleware");
 
-const { getPosts, createPost } = require("./handlers/posts");
+const { getPosts, createPost, getPost, commentOnPost } = require("./handlers/posts");
 const {
   signup,
   login,
@@ -15,6 +15,9 @@ const {
 //Posts routes
 app.get("/posts", getPosts);
 app.post("/createPost", AuthMiddleware, createPost);
+app.get('/post/:postId', getPost);
+app.post('/post/:postId/comment', AuthMiddleware, commentOnPost);
+
 
 //Users routes
 app.post("/signup", signup);

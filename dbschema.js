@@ -12,13 +12,21 @@ let db = {
         location: 'Lonodn, UK'
       }
     ],
-    screams: [
+    posts: [
       {
         useruserHandle: 'user',
-        body: 'This is a sample scream',
+        text: 'This is a sample post',
         createdAt: '2019-03-15T10:59:52.798Z',
         likeCount: 5,
         commentCount: 3
+      }
+    ],
+    comments: [
+      {
+        userHandle: 'user',
+        postId: 'kdjsfgdksuufhgkdsufky',
+        text: 'nice one mate!',
+        createdAt: '2019-03-15T10:59:52.798Z'
       }
     ]
   };
@@ -37,11 +45,11 @@ let db = {
     likes: [
       {
         useruserHandle: 'user',
-        screamId: 'hh7O5oWfWucVzGbHH2pa'
+        postId: 'hh7O5oWfWucVzGbHH2pa'
       },
       {
         useruserHandle: 'user',
-        screamId: '3IOnFoQexRcofs5OhBXO'
+        postId: '3IOnFoQexRcofs5OhBXO'
       }
     ]
   };

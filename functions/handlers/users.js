@@ -5,7 +5,7 @@ const config = require('../util/config');
 const firebase = require('firebase');
 firebase.initializeApp(config);
 
-const { validateSignupData, validateLoginData } = require('../util/validators');
+const { validateSignupData, validateLoginData, reduceUserDetails } = require('../util/validators');
 
 exports.signup = (req, res) => {
   const newUser = {
@@ -121,7 +121,7 @@ exports.getAuthenticatedUser = (req, res) => {
           .collection('likes')
           .where('userHandle', '==', req.user.userHandle)
           .get();
-      }
+      } else return res.json({ message: 'You can not get authenticated user as the document does not exist' }); // This line needs to be double-checked
     })
     .then((data) => {
       userData.likes = [];

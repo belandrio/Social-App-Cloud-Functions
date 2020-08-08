@@ -3,28 +3,35 @@ const app = require("express")();
 
 const AuthMiddleware = require("./util/AuthMiddleware");
 
-const { getPosts, createPost, getPost, commentOnPost } = require("./handlers/posts");
+const {
+  getPosts,
+  createPost,
+  getPost,
+  commentOnPost,
+  deletePost
+} = require("./handlers/posts");
+
 const {
   signup,
   login,
   uploadImage,
   addUserDetails,
-  getAuthenticatedUser
+  getAuthenticatedUser,
 } = require("./handlers/users");
 
 //Posts routes
 app.get("/posts", getPosts);
+app.get("/post/:postId", getPost);
 app.post("/createPost", AuthMiddleware, createPost);
-app.get('/post/:postId', getPost);
-app.post('/post/:postId/comment', AuthMiddleware, commentOnPost);
-
+app.delete("/post/:postId", AuthMiddleware, deletePost);
+app.post("/post/:postId/comment", AuthMiddleware, commentOnPost);
 
 //Users routes
 app.post("/signup", signup);
 app.post("/login", login);
 app.post("/user/image", AuthMiddleware, uploadImage);
-app.post('/user', AuthMiddleware, addUserDetails);
-app.get('/user', AuthMiddleware, getAuthenticatedUser);
+app.post("/user", AuthMiddleware, addUserDetails);
+app.get("/user", AuthMiddleware, getAuthenticatedUser);
 
 //https://baseurl.com/api/posts or https://baseurl.com/api/createPost
 

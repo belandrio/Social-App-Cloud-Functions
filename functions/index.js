@@ -8,7 +8,9 @@ const {
   createPost,
   getPost,
   commentOnPost,
-  deletePost
+  deletePost,
+  likePost,
+  unlikePost
 } = require("./handlers/posts");
 
 const {
@@ -25,6 +27,8 @@ app.get("/post/:postId", getPost);
 app.post("/createPost", AuthMiddleware, createPost);
 app.delete("/post/:postId", AuthMiddleware, deletePost);
 app.post("/post/:postId/comment", AuthMiddleware, commentOnPost);
+app.get('/post/:postId/like', AuthMiddleware, likePost);
+app.get('/post/:postId/unlike', AuthMiddleware, unlikePost);
 
 //Users routes
 app.post("/signup", signup);

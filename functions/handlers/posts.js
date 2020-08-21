@@ -13,6 +13,9 @@ exports.getPosts =  (req, res) => {
             text: doc.data().text,
             userHandle: doc.data().userHandle,
             createdAt: doc.data().createdAt,
+            likeCount: doc.data().likeCount, 
+            commentCount: doc.data().commentCount,
+            userImage: doc.data().userImage
           });
         });
         return res.json(posts);

@@ -27,6 +27,9 @@ exports.getPosts =  (req, res) => {
   };
 
 exports.createPost = (req, res) => {
+  if (req.body.text.trim() === '') {
+    return res.status(400).json({ text: 'Post must not be empty' });
+  }
     const newPost = {
       text: req.body.text,
       userHandle: req.user.userHandle, 

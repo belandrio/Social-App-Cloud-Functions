@@ -1,5 +1,10 @@
 const functions = require("firebase-functions");
 const app = require("express")();
+
+const cors = require('cors');
+app.use(cors());
+
+
 const { db } = require('./util/admin');
 
 const AuthMiddleware = require("./util/AuthMiddleware");
@@ -62,7 +67,7 @@ exports.createNotificationOnLike = functions
             read: false,
             postId: doc.id
           });
-        }
+        } else return res.status(404).json({ error: 'Document not found' });
       })
       .then(() => {
         return;
@@ -89,7 +94,7 @@ exports.createNotificationOnLike = functions
             read: false,
             postId: doc.id
           });
-        }
+        } else return res.status(404).json({ error: 'Document not found' });
       })
       .then(() => {
         return;

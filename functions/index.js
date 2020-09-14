@@ -1,11 +1,10 @@
 const functions = require("firebase-functions");
 const app = require("express")();
 
-const cors = require('cors');
+const cors = require("cors");
 app.use(cors());
 
-
-const { db } = require('./util/admin');
+const { db } = require("./util/admin");
 
 const AuthMiddleware = require("./util/AuthMiddleware");
 
@@ -16,7 +15,7 @@ const {
   commentOnPost,
   deletePost,
   likePost,
-  unlikePost
+  unlikePost,
 } = require("./handlers/posts");
 
 const {
@@ -26,7 +25,7 @@ const {
   addUserDetails,
   getAuthenticatedUser,
   getUserDetails,
-  markNotificationsRead
+  markNotificationsRead,
 } = require("./handlers/users");
 
 //Posts routes
@@ -35,8 +34,8 @@ app.get("/post/:postId", getPost);
 app.post("/createPost", AuthMiddleware, createPost);
 app.delete("/post/:postId", AuthMiddleware, deletePost);
 app.post("/post/:postId/comment", AuthMiddleware, commentOnPost);
-app.get('/post/:postId/like', AuthMiddleware, likePost);
-app.get('/post/:postId/unlike', AuthMiddleware, unlikePost);
+app.get("/post/:postId/like", AuthMiddleware, likePost);
+app.get("/post/:postId/unlike", AuthMiddleware, unlikePost);
 
 //Users routes
 app.post("/signup", signup);
@@ -44,16 +43,16 @@ app.post("/login", login);
 app.post("/user/image", AuthMiddleware, uploadImage);
 app.post("/user", AuthMiddleware, addUserDetails);
 app.get("/user", AuthMiddleware, getAuthenticatedUser);
-app.get('/user/:userHandle', getUserDetails);
-app.post('/notifications', AuthMiddleware, markNotificationsRead);
+app.get("/user/:userHandle", getUserDetails);
+app.post("/notifications", AuthMiddleware, markNotificationsRead);
 
 //https://baseurl.com/api/posts or https://baseurl.com/api/createPost
 
 exports.api = functions.region("europe-west3").https.onRequest(app);
 
 exports.createNotificationOnLike = functions
-  .region('europe-west3')
-  .firestore.document('likes/{id}')
+  .region("europe-west3")
+  .firestore.document("likes/{id}")
   .onCreate((snapshot) => {
     db.doc(`/posts/${snapshot.data().postId}`)
       .get()
@@ -63,11 +62,11 @@ exports.createNotificationOnLike = functions
             createdAt: new Date().toISOString(),
             recipient: doc.data().userHandle,
             sender: snapshot.data().userHandle,
-            type: 'like',
+            type: "like",
             read: false,
-            postId: doc.id
+            postId: doc.id,
           });
-        } else return res.status(404).json({ error: 'Document not found' });
+        } else return res.status(404).json({ error: "Document not found" });
       })
       .then(() => {
         return;
@@ -78,9 +77,9 @@ exports.createNotificationOnLike = functions
       });
   });
 
-  exports.createNotificationOnComment = functions
-  .region('europe-west3')
-  .firestore.document('comments/{id}')
+exports.createNotificationOnComment = functions
+  .region("europe-west3")
+  .firestore.document("comments/{id}")
   .onCreate((snapshot) => {
     db.doc(`/posts/${snapshot.data().postId}`)
       .get()
@@ -90,11 +89,11 @@ exports.createNotificationOnLike = functions
             createdAt: new Date().toISOString(),
             recipient: doc.data().userHandle,
             sender: snapshot.data().userHandle,
-            type: 'comment',
+            type: "comment",
             read: false,
-            postId: doc.id
+            postId: doc.id,
           });
-        } else return res.status(404).json({ error: 'Document not found' });
+        } else return res.status(404).json({ error: "Document not found" });
       })
       .then(() => {
         return;
@@ -105,9 +104,9 @@ exports.createNotificationOnLike = functions
       });
   });
 
-  exports.deleteNotificationOnUnLike = functions
-  .region('europe-west3')
-  .firestore.document('likes/{id}')
+exports.deleteNotificationOnUnLike = functions
+  .region("europe-west3")
+  .firestore.document("likes/{id}")
   .onDelete((snapshot) => {
     db.doc(`/notifications/${snapshot.id}`)
       .delete()

@@ -1,15 +1,15 @@
-const { admin, db} = require('./admin');
+const { admin, db } = require("./admin");
 
 module.exports = (req, res, next) => {
   let idToken;
   if (
     req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer ')
+    req.headers.authorization.startsWith("Bearer ")
   ) {
-    idToken = req.headers.authorization.split('Bearer ')[1];
+    idToken = req.headers.authorization.split("Bearer ")[1];
   } else {
-    console.error('No token found');
-    return res.status(403).json({ error: 'Unauthorized' });
+    console.error("No token found");
+    return res.status(403).json({ error: "Unauthorized" });
   }
 
   admin
@@ -17,10 +17,10 @@ module.exports = (req, res, next) => {
     .verifyIdToken(idToken)
     .then((decodedToken) => {
       req.user = decodedToken;
-      console.log(req.user)
+      console.log(req.user);
       return db
-        .collection('users')
-        .where('userId', '==', req.user.uid)
+        .collection("users")
+        .where("userId", "==", req.user.uid)
         .limit(1)
         .get();
     })
@@ -30,7 +30,7 @@ module.exports = (req, res, next) => {
       return next();
     })
     .catch((err) => {
-      console.error('Error while verifying token ', err);
+      console.error("Error while verifying token ", err);
       return res.status(403).json(err);
     });
 };
